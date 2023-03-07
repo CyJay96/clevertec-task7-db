@@ -58,3 +58,55 @@ union
 (select * from ticket_flights
  where amount = (select max(amount) from ticket_flights)
  limit 1);
+
+-- Написать DDL таблицы Customers, должны быть поля id, firstName, lastName, email, phone.
+-- Добавить ограничения на поля (constraints):
+create table if not exists customers (
+    id bigserial not null,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    email varchar(255) not null unique,
+    phone varchar(255) not null unique,
+    primary key (id)
+);
+
+-- Написать DDL таблицы Orders, должен быть id, customerId,	quantity.
+-- Должен быть внешний ключ на таблицу customers + ограничения:
+create table if not exists orders (
+    id bigserial not null,
+    customer_id bigint not null,
+    quantity bigint not null,
+    primary key (id)
+);
+
+alter table if exists orders
+    add constraint orders_customers_fk
+        foreign key (customer_id) references customers;
+
+-- Написать 5 insert в эти таблицы:
+insert into customers (first_name, last_name, email, phone)
+values ('James', 'Smith', 'james@smith.eng', '+447975297143');
+insert into customers (first_name, last_name, email, phone)
+values ('John', 'Williams', 'john@williams.eng', '+447975381642');
+insert into customers (first_name, last_name, email, phone)
+values ('Michael', 'Jones', 'michael@brown.eng', '+447975791382');
+insert into customers (first_name, last_name, email, phone)
+values ('Thomas', 'Brown', 'thomas@brown.eng', '+447975248637');
+insert into customers (first_name, last_name, email, phone)
+values ('Daniel', 'James', 'daniel@james.eng', '+447975753951');
+
+insert into orders (customer_id, quantity)
+values (1, 476);
+insert into orders (customer_id, quantity)
+values (2, 79);
+insert into orders (customer_id, quantity)
+values (3, 3618);
+insert into orders (customer_id, quantity)
+values (4, 12);
+insert into orders (customer_id, quantity)
+values (5, 973);
+
+-- Удалить таблицы:
+drop table orders;
+drop table customers;
+-- Написать свой кастомный запрос (rus + sql):
