@@ -109,4 +109,14 @@ values (5, 973);
 -- Удалить таблицы:
 drop table orders;
 drop table customers;
+
 -- Написать свой кастомный запрос (rus + sql):
+-- Вывести ID бронирования и общую стоимость, которая больше 20000 и меньше 30000,
+-- включённых в бронирование перелётов самолётов, находившихся в воздухе с классом обслуживания 'Comfort':
+select t.book_ref, sum(tf.amount) total_amount from tickets t
+join ticket_flights tf on t.ticket_no = tf.ticket_no
+join flights f on f.flight_id = tf.flight_id
+where tf.fare_conditions = 'Comfort' and f.status = 'Departed'
+group by t.book_ref
+having sum(tf.amount) between 20000 and 30000
+order by sum(tf.amount);
